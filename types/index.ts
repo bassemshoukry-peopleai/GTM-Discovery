@@ -22,7 +22,7 @@ export interface FormData {
   // Accounts
   accountOwnerRoles: string[]
   accountOwner: string
-  usesAccountTeams: string
+  usesAccountTeams: string[]
   customAccountFields: string[]
   accountTypes: string[]
   accountRecordTypes: string[]

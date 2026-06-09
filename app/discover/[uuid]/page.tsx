@@ -9,7 +9,7 @@ const ROLES = ['AEs / Account Executives','BDRs / SDRs','CSMs / Customer Success
 
 const EMPTY: FormData = {
   userRoles:[], otherRoles:'', hasGeographies:'', geographies:'', hasSegments:'', segments:'',
-  accountOwnerRoles:[], accountOwner:'', usesAccountTeams:'',
+  accountOwnerRoles:[], accountOwner:'', usesAccountTeams:[],
   customAccountFields:[], accountTypes:[], accountRecordTypes:[],
   excludeAccountTypes:'', hasPartnerSelling:'', partnerDefinition:'',
   oppCreation:'', usesContactRoles:'', oppsPerAccount:'',
@@ -237,12 +237,14 @@ export default function DiscoverPage() {
             {(data.accountOwnerRoles || []).includes('Other') && <Field label="Describe other ownership">
               <input type="text" value={data.accountOwner} onChange={e => setData({...data, accountOwner: e.target.value})} placeholder="e.g., Territory managers…" style={inputStyle} />
             </Field>}
-            <Field label="How are users associated with account records in Salesforce?">
-              <RadioStack options={['Standard Account Teams object','Custom ownership lookup fields','Both standard Account Teams and custom fields']} field="usesAccountTeams" data={data} setData={setData} />
+            <Field label="How are users associated with account records in Salesforce? (select all that apply)">
+              <CheckboxGrid options={['Standard owner field','Standard Account Teams object','Custom ownership lookup fields','Enterprise Territory Management object']} field="usesAccountTeams" data={data} setData={setData} />
             </Field>
-            <Field label="Custom lookup fields for account ownership" hint="Include the Salesforce API name (e.g., CSM_Owner__c)">
-              <TagInput field="customAccountFields" data={data} setData={setData} placeholder="e.g., CSM_Owner__c — press Enter to add" />
-            </Field>
+            {(data.usesAccountTeams as string[] || []).includes('Custom ownership lookup fields') && (
+              <Field label="Custom lookup fields for account ownership" hint="Include the Salesforce API name (e.g., CSM_Owner__c)">
+                <TagInput field="customAccountFields" data={data} setData={setData} placeholder="e.g., CSM_Owner__c — press Enter to add" />
+              </Field>
+            )}
           </Card>
           <Card title="Account types & record types" desc="These drive eligibility filter configuration.">
             <Field label="List relevant Account Type values used by your sales org">
