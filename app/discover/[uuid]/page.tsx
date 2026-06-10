@@ -337,7 +337,7 @@ export default function DiscoverPage() {
             {data.hasGeographies === 'Yes' && <Field label="List geographies / territories">
               <input type="text" value={data.geographies} onChange={e => setData({...data, geographies: e.target.value})} placeholder="e.g., AMER, EMEA, APAC" style={inputStyle} />
             </Field>}
-            <Field label="Are users organized by business segment?">
+            <Field label="Are users split to align to specific business segments?">
               <RadioStack options={['Yes','No']} field="hasSegments" data={data} setData={setData} onSelect={() => {}} />
             </Field>
             {data.hasSegments === 'Yes' && <Field label="List segments">
