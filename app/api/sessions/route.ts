@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabaseAdmin
     .from('sessions')
     .insert({
-      consultant_id: (session.user as any).id || session.user.email,
+      consultant_id: session.user.email,
       consultant_email: session.user.email,
       consultant_name: session.user.name,
       customer_name: customerName,
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const consultantId = (session.user as any).id || session.user.email
+  const consultantId = session.user.email
 
   const { data, error } = await supabaseAdmin
     .from('sessions')
