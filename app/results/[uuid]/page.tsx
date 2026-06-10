@@ -31,8 +31,9 @@ function Section({ title, right, children }: { title: string; right?: React.Reac
 }
 
 function ProfileCard({ profile, index }: { profile: ProfileRecommendation, index: number }) {
-  const on = Object.entries(profile.settings).filter(([,v])=>v).map(([k])=>SETTING_NAMES[k])
-  const off = Object.entries(profile.settings).filter(([,v])=>!v).map(([k])=>SETTING_NAMES[k])
+  const settings = profile.settings || {}
+  const on = Object.entries(settings).filter(([,v])=>v).map(([k])=>SETTING_NAMES[k]).filter(Boolean)
+  const off = Object.entries(settings).filter(([,v])=>!v).map(([k])=>SETTING_NAMES[k]).filter(Boolean)
 
   return (
     <div style={{ border: '1px solid rgba(0,0,0,0.1)', borderRadius: 14, overflow: 'hidden', marginBottom: 12 }}>
@@ -136,8 +137,9 @@ export default function ResultsPage() {
     </div>
   )
 
-  const totalFilters = results?.profiles.reduce((n,p) => n + (p.eligibilityFilters||[]).length, 0) || 0
-  const totalRanking = results?.profiles.reduce((n,p) => n + (p.rankingGroups||[]).length, 0) || 0
+  const profiles = results?.profiles || []
+  const totalFilters = profiles.reduce((n,p) => n + (p.eligibilityFilters||[]).length, 0)
+  const totalRanking = profiles.reduce((n,p) => n + (p.rankingGroups||[]).length, 0)
 
   return (
     <div style={{ minHeight: '100vh', background: '#f5f5f3' }}>
@@ -208,7 +210,7 @@ export default function ResultsPage() {
 
           {/* Profiles label */}
           <p style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#9a9a96', marginBottom: 12 }}>Configuration profiles</p>
-          {results.profiles.map((p, i) => <ProfileCard key={i} profile={p} index={i} />)}
+          {profiles.map((p, i) => <ProfileCard key={i} profile={p} index={i} />)}
 
           {/* Partner config */}
           {results.partnerConfig?.needed && (
