@@ -75,12 +75,12 @@ function ProfileCard({ profile, index }: { profile: ProfileRecommendation, index
         ) : (profile.eligibilityFilters || []).map((f, i) => (
           <div key={i} style={{ paddingTop: i > 0 ? 12 : 0, marginTop: i > 0 ? 12 : 0, borderTop: i > 0 ? '1px solid rgba(0,0,0,0.06)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
-              <span style={{ fontSize: 13, fontWeight: 500 }}>{f.name}</span>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>{typeof f.name === 'string' ? f.name : JSON.stringify(f.name)}</span>
               <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: '#fef2f2', color: '#991b1b', border: '1px solid #fecaca', flexShrink: 0 }}>Eligibility</span>
             </div>
-            <p style={{ fontSize: 12, color: '#9a9a96', marginBottom: 6 }}>Object: {f.object}</p>
-            <code style={{ display: 'block', fontSize: 12, background: '#f5f5f3', borderRadius: 6, padding: '6px 10px', fontFamily: 'monospace', marginBottom: 6 }}>{f.rule}</code>
-            <div style={{ background: '#eff6ff', border: '1px solid #dbeafe', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#1e40af', lineHeight: 1.5 }}>{f.reason}</div>
+            <p style={{ fontSize: 12, color: '#9a9a96', marginBottom: 6 }}>Object: {typeof f.object === 'string' ? f.object : JSON.stringify(f.object)}</p>
+            <code style={{ display: 'block', fontSize: 12, background: '#f5f5f3', borderRadius: 6, padding: '6px 10px', fontFamily: 'monospace', marginBottom: 6 }}>{typeof f.rule === 'string' ? f.rule : JSON.stringify(f.rule)}</code>
+            <div style={{ background: '#eff6ff', border: '1px solid #dbeafe', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#1e40af', lineHeight: 1.5 }}>{typeof f.reason === 'string' ? f.reason : JSON.stringify(f.reason)}</div>
           </div>
         ))}
       </Section>
@@ -92,12 +92,12 @@ function ProfileCard({ profile, index }: { profile: ProfileRecommendation, index
         ) : (profile.rankingGroups || []).map((g, i) => (
           <div key={i} style={{ paddingTop: i > 0 ? 12 : 0, marginTop: i > 0 ? 12 : 0, borderTop: i > 0 ? '1px solid rgba(0,0,0,0.06)' : 'none' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
-              <span style={{ fontSize: 13, fontWeight: 500 }}>{g.name}</span>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>{typeof g.name === 'string' ? g.name : JSON.stringify(g.name)}</span>
               <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 99, background: '#fffbeb', color: '#854d0e', border: '1px solid #fde68a', flexShrink: 0 }}>Ranking</span>
             </div>
-            <p style={{ fontSize: 12, color: '#9a9a96', marginBottom: 6 }}>Priority {i + 1} · {g.object} · {g.type}</p>
-            <code style={{ display: 'block', fontSize: 12, background: '#f5f5f3', borderRadius: 6, padding: '6px 10px', fontFamily: 'monospace', marginBottom: 6 }}>{g.condition}</code>
-            <div style={{ background: '#eff6ff', border: '1px solid #dbeafe', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#1e40af', lineHeight: 1.5 }}>{g.reason}</div>
+            <p style={{ fontSize: 12, color: '#9a9a96', marginBottom: 6 }}>Priority {i + 1} · {typeof g.object === 'string' ? g.object : JSON.stringify(g.object)} · {typeof g.type === 'string' ? g.type : JSON.stringify(g.type)}</p>
+            <code style={{ display: 'block', fontSize: 12, background: '#f5f5f3', borderRadius: 6, padding: '6px 10px', fontFamily: 'monospace', marginBottom: 6 }}>{typeof g.condition === 'string' ? g.condition : JSON.stringify(g.condition)}</code>
+            <div style={{ background: '#eff6ff', border: '1px solid #dbeafe', borderRadius: 8, padding: '8px 12px', fontSize: 12, color: '#1e40af', lineHeight: 1.5 }}>{typeof g.reason === 'string' ? g.reason : JSON.stringify(g.reason)}</div>
           </div>
         ))}
       </Section>
