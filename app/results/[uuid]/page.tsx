@@ -30,7 +30,6 @@ function ProfileCard({ profile, index, forceOpen }: { profile: ProfileRecommenda
       <button
         onClick={() => setOpen(o => !o)}
         style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 12 }}
-        onClick={() => setOpen(o => !o)}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
           <div style={{ width: 28, height: 28, background: '#1a1a18', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, fontWeight: 700, color: '#fff' }}>
