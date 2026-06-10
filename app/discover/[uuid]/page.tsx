@@ -7,6 +7,116 @@ import { FormData } from '@/types'
 const STEPS = ['Foundation','Accounts','Opportunities','Contacts & Leads','Technology','Review']
 const ROLES = ['AEs / Account Executives','BDRs / SDRs','CSMs / Customer Success','Sales Engineers','Channel / Partner Managers','Renewal Managers','Account Managers']
 
+const SCENARIOS = [
+  {
+    // Enterprise SaaS, complex multi-role org
+    userRoles: ['AEs / Account Executives','CSMs / Customer Success','BDRs / SDRs'],
+    otherRoles: '',
+    hasGeographies: 'Yes', geographies: 'AMER, EMEA, APAC',
+    hasSegments: 'Yes', segments: 'Enterprise, Commercial, SMB',
+    accountOwnerRoles: ['AEs / Account Executives'],
+    accountOwner: '',
+    usesAccountTeams: ['Standard Account Teams object','Custom ownership lookup fields'],
+    customAccountFields: ['CSM_Owner__c','SE_Owner__c'],
+    accountTypes: ['Customer','Prospect','Former Customer'],
+    accountRecordTypes: ['Enterprise Account','Commercial Account'],
+    excludeAccountTypes: 'Competitor, Internal, Investor',
+    hasPartnerSelling: 'Yes', partnerDefinition: 'Account.Type = "Partner" or Account.RecordType = "Channel Partner"',
+    oppCreation: 'Both manual and automatic',
+    usesContactRoles: 'Yes — consistently populated',
+    oppsPerAccount: '2–3 — a few concurrent',
+    oppOwnerRoles: ['AEs / Account Executives'],
+    oppOwner: '',
+    usesOppTeams: 'Yes',
+    customOppFields: ['Solutions_Engineer__c'],
+    oppTypes: ['New Business','Renewal','Expansion','Professional Services'],
+    oppRecordTypes: ['Enterprise Opp','Commercial Opp'],
+    excludeOppTypes: 'Internal Testing',
+    usesLeads: 'Yes',
+    leadEngagerRoles: ['BDRs / SDRs'],
+    leadCreation: 'Inbound from HubSpot forms, BDR manual creation via Outreach sequences',
+    otherTools: 'Outreach, Gong, Clari, LeanData, Marketo',
+    sfValidations: 'Contacts blocked if duplicate email exists; Lead requires Company field',
+    activityLoggingTools: 'Both tools will run simultaneously',
+    activityLoggingToolsDetail: 'Outreach',
+    manualLogging: "Partially — some log, others don't",
+    manualFields: 'Next Steps, MEDDPICC fields, Close Date, Stage',
+  },
+  {
+    // Mid-market, simpler setup
+    userRoles: ['AEs / Account Executives','BDRs / SDRs','Renewal Managers'],
+    otherRoles: '',
+    hasGeographies: 'Yes', geographies: 'North America, EMEA',
+    hasSegments: 'Yes', segments: 'Mid-Market, SMB',
+    accountOwnerRoles: ['AEs / Account Executives','Renewal Managers'],
+    accountOwner: '',
+    usesAccountTeams: ['Standard owner field'],
+    customAccountFields: [],
+    accountTypes: ['Customer','Prospect'],
+    accountRecordTypes: ['Standard Account'],
+    excludeAccountTypes: 'Internal, Test',
+    hasPartnerSelling: 'No', partnerDefinition: '',
+    oppCreation: 'Manually by reps',
+    usesContactRoles: 'Yes — but inconsistently or partially',
+    oppsPerAccount: '1 — one active deal per account',
+    oppOwnerRoles: ['AEs / Account Executives'],
+    oppOwner: '',
+    usesOppTeams: 'No',
+    customOppFields: [],
+    oppTypes: ['New Business','Renewal'],
+    oppRecordTypes: ['Standard Opportunity'],
+    excludeOppTypes: 'Internal',
+    usesLeads: 'Yes',
+    leadEngagerRoles: ['BDRs / SDRs'],
+    leadCreation: 'Inbound marketing leads from Marketo, BDR outbound via SalesLoft',
+    otherTools: 'SalesLoft, Gong, Marketo, Salesforce CPQ',
+    sfValidations: 'No known validation rules blocking contact creation',
+    activityLoggingTools: 'No — People.ai will be the only source',
+    activityLoggingToolsDetail: '',
+    manualLogging: 'Yes — reps manually log most activities',
+    manualFields: 'Next Steps, Close Date, Stage, Amount',
+  },
+  {
+    // Financial services, territory-based, no leads
+    userRoles: ['AEs / Account Executives','Sales Engineers','Channel / Partner Managers'],
+    otherRoles: 'Overlay specialists',
+    hasGeographies: 'Yes', geographies: 'East, West, Central, LATAM',
+    hasSegments: 'No', segments: '',
+    accountOwnerRoles: ['AEs / Account Executives'],
+    accountOwner: '',
+    usesAccountTeams: ['Standard Account Teams object','Enterprise Territory Management object'],
+    customAccountFields: [],
+    accountTypes: ['Customer','Prospect','Strategic Account'],
+    accountRecordTypes: ['Financial Services Account','Named Account'],
+    excludeAccountTypes: 'Competitor, Subsidiary, Inactive',
+    hasPartnerSelling: 'Yes', partnerDefinition: 'Account.Partner_Type__c is not null',
+    oppCreation: 'Marketing / BDR qualified and converted from Lead',
+    usesContactRoles: 'Yes — consistently populated',
+    oppsPerAccount: '4–10 — many active deals',
+    oppOwnerRoles: ['AEs / Account Executives','Sales Engineers'],
+    oppOwner: '',
+    usesOppTeams: 'Sometimes — for strategic deals',
+    customOppFields: ['Solutions_Consultant__c','Overlay_AE__c'],
+    oppTypes: ['New Logo','Upsell','Cross-sell','Renewal'],
+    oppRecordTypes: ['Named Account Opp','Territory Opp'],
+    excludeOppTypes: 'POC, Internal Demo',
+    usesLeads: 'No',
+    leadEngagerRoles: [],
+    leadCreation: '',
+    otherTools: 'Gong, Clari, Gainsight, Seismic, DocuSign CLM',
+    sfValidations: 'Required fields on Contact: Title, Phone; duplicate rules enforced',
+    activityLoggingTools: 'Both tools will run simultaneously',
+    activityLoggingToolsDetail: 'Einstein Activity Capture (being deprecated)',
+    manualLogging: "Partially — some log, others don't",
+    manualFields: 'MEDDPICC, Executive Sponsor, Technical Win criteria, Close Date',
+  },
+]
+
+function getSimulatedData(): FormData {
+  const scenario = SCENARIOS[Math.floor(Math.random() * SCENARIOS.length)]
+  return { ...EMPTY, ...scenario }
+}
+
 const EMPTY: FormData = {
   userRoles:[], otherRoles:'', hasGeographies:'', geographies:'', hasSegments:'', segments:'',
   accountOwnerRoles:[], accountOwner:'', usesAccountTeams:[],
@@ -198,7 +308,15 @@ export default function DiscoverPage() {
             <div key={i} style={{ flex: 1, height: 3, borderRadius: 99, background: i < step ? '#1a1a18' : i === step ? 'rgba(26,26,24,0.3)' : 'rgba(0,0,0,0.1)' }} />
           ))}
         </div>
-        <p style={{ fontSize: 12, color: '#9a9a96', marginBottom: 24 }}>Step {step + 1} of {STEPS.length} — {STEPS[step]}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+          <p style={{ fontSize: 12, color: '#9a9a96', margin: 0 }}>Step {step + 1} of {STEPS.length} — {STEPS[step]}</p>
+          <button
+            onClick={() => { setData(getSimulatedData()); setStep(5) }}
+            style={{ fontSize: 11, color: '#9a9a96', background: 'none', border: '1px dashed rgba(0,0,0,0.2)', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontFamily: 'inherit' }}
+          >
+            ⚡ Simulate answers
+          </button>
+        </div>
 
         {error && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', borderRadius: 8, padding: '12px 16px', fontSize: 13, marginBottom: 16 }}>{error}</div>}
 
