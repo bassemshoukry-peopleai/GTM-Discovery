@@ -12,7 +12,7 @@ export async function GET(
   }
 
   const { id } = await params
-  const consultantId = (authSession.user as any).id || authSession.user.email
+  const consultantId = authSession.user.email
 
   const { data: session, error: sessionError } = await supabaseAdmin
     .from('sessions')

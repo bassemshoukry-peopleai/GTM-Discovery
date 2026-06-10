@@ -127,6 +127,7 @@ export default function ResultsPage() {
         setResults(d.results?.recommendations || null)
         setLoading(false)
       })
+      .catch(() => { setError('Failed to load results.'); setLoading(false) })
   }, [authSession, uuid])
 
   if (loading || status === 'loading') return (
