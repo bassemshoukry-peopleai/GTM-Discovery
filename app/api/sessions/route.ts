@@ -46,6 +46,27 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ session: data })
 }
 
+export async function DELETE(req: NextRequest) {
+  const session = await auth()
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const { id } = await req.json()
+  if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+
+  await supabaseAdmin.from('results').delete().eq('session_id', id)
+  await supabaseAdmin.from('responses').delete().eq('session_id', id)
+  const { error } = await supabaseAdmin
+    .from('sessions')
+    .delete()
+    .eq('id', id)
+    .eq('consultant_id', session.user.email)
+
+  if (error) return NextResponse.json({ error: 'Failed to delete' }, { status: 500 })
+  return NextResponse.json({ success: true })
+}
+
 export async function GET(req: NextRequest) {
   const session = await auth()
   if (!session?.user?.email) {

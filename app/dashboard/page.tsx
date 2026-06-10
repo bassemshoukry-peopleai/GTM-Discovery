@@ -25,6 +25,15 @@ export default function Dashboard() {
   const router = useRouter()
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
+  const [deleting, setDeleting] = useState<string | null>(null)
+
+  async function handleDelete(id: string) {
+    if (!confirm('Delete this session? This cannot be undone.')) return
+    setDeleting(id)
+    await fetch('/api/sessions', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) })
+    setSessions(s => s.filter(x => x.id !== id))
+    setDeleting(null)
+  }
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/')
@@ -150,6 +159,14 @@ export default function Dashboard() {
                         {s.status === 'submitted' && (
                           <span style={{ fontSize: 12, color: '#9a9a96' }}>Generating…</span>
                         )}
+                        <button
+                          onClick={() => handleDelete(s.id)}
+                          disabled={deleting === s.id}
+                          style={{ fontSize: 12, color: '#9a9a96', border: 'none', background: 'none', cursor: 'pointer', padding: '6px 4px', opacity: deleting === s.id ? 0.4 : 1 }}
+                          title="Delete session"
+                        >
+                          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
                       </div>
                     </td>
                   </tr>
