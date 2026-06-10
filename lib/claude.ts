@@ -17,7 +17,7 @@ Key Backstory matching knowledge:
 - Partner matching: configurable field values for Account.Type and Account.RecordType
 - Sync Without "Who": enables syncing to account only (no contact/lead required)
 
-Return ONLY valid compact JSON (no markdown, no backticks) matching exactly this schema:
+Return ONLY valid compact JSON (no markdown, no backticks, no trailing commas). ALL field values must be primitive strings, numbers, or booleans — never nested objects. The "rule" and "condition" fields must be plain strings (e.g. "Account.Type != 'Competitor'"), not objects. Matching exactly this schema:
 {"profileCount":0,"profiles":[{"name":"","targetRoles":[],"reason":"","settings":{"intakeData":true,"transcriptIntake":true,"displayData":true,"pushData":true,"emailSync":true,"meetingSync":true,"contactCreation":true,"contactRoleCreation":true},"eligibilityFilters":[{"name":"","object":"","rule":"","reason":""}],"rankingGroups":[{"name":"","object":"","type":"","condition":"","reason":""}],"notificationSetting":"","specialConsiderations":[]}],"partnerConfig":{"needed":false,"fieldValues":[],"reason":""},"syncWithoutWho":{"recommended":false,"reason":""},"globalNotes":[]}`
 
 function buildUserPrompt(data: FormData): string {
@@ -27,7 +27,7 @@ ROLES: ${[...data.userRoles, data.otherRoles].filter(Boolean).join(', ') || 'Not
 GEOGRAPHIES: ${data.hasGeographies === 'Yes' ? data.geographies : 'None'}
 SEGMENTS: ${data.hasSegments === 'Yes' ? data.segments : 'None'}
 ACCOUNT OWNERS: ${(data.accountOwnerRoles || []).join(', ') || 'Not specified'}${data.accountOwner ? ' (' + data.accountOwner + ')' : ''}
-ACCOUNT TEAMS: ${data.usesAccountTeams || 'Not specified'}
+ACCOUNT TEAMS: ${(data.usesAccountTeams as string[] || []).join(', ') || 'Not specified'}
 CUSTOM ACCOUNT FIELDS: ${data.customAccountFields.join(', ') || 'None'}
 ACCOUNT TYPES: ${data.accountTypes.join(', ') || 'None'}
 ACCOUNT RECORD TYPES: ${data.accountRecordTypes.join(', ') || 'None'}
