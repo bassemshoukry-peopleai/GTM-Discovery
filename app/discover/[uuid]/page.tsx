@@ -357,7 +357,7 @@ export default function DiscoverPage() {
               ]},
               { section: 'Accounts', rows: [
                 ['Account owners', (data.accountOwnerRoles||[]).join(', ') || '—'],
-                ['Account Teams', data.usesAccountTeams || '—'],
+                ['Account Teams', (data.usesAccountTeams||[]).join(', ') || '—'],
                 ['Account Types', data.accountTypes.join(', ') || 'None'],
                 ['Record Types', data.accountRecordTypes.join(', ') || 'None'],
                 ['Excluded', data.excludeAccountTypes || 'None'],
