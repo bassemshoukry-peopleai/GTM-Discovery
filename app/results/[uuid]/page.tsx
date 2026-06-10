@@ -195,14 +195,14 @@ export default function ResultsPage() {
           {/* Summary cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
             {[
-              { label: 'Profiles', value: results.profileCount, sub: 'to create' },
-              { label: 'Filters', value: totalFilters, sub: 'eligibility rules' },
-              { label: 'Ranking', value: totalRanking, sub: 'ranking groups' },
+              { label: 'Profiles', value: String(results.profileCount ?? profiles.length), sub: 'to create' },
+              { label: 'Filters', value: String(totalFilters), sub: 'eligibility rules' },
+              { label: 'Ranking', value: String(totalRanking), sub: 'ranking groups' },
               { label: 'Partner', value: results.partnerConfig?.needed ? 'Yes' : 'No', sub: 'config needed' },
             ].map(c => (
               <div key={c.label} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.1)', borderRadius: 14, padding: '14px 16px' }}>
                 <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#9a9a96', marginBottom: 6 }}>{c.label}</div>
-                <div style={{ fontSize: 26, fontWeight: 700, lineHeight: 1 }}>{c.value}</div>
+                <div style={{ fontSize: 26, fontWeight: 700, lineHeight: 1 }}>{String(c.value ?? '—')}</div>
                 <div style={{ fontSize: 11, color: '#9a9a96', marginTop: 4 }}>{c.sub}</div>
               </div>
             ))}
